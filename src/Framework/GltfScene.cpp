@@ -80,6 +80,7 @@ struct Bbox {
 // Collect the value of all materials
 //
 void GltfScene::import_materials(const tinygltf::Model& tmodel) {
+	tModel = tmodel;
 	materials.reserve(tmodel.materials.size());
 
 	for (auto& tmat : tmodel.materials) {

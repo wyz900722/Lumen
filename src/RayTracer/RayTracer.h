@@ -52,7 +52,8 @@ class RayTracer : public LumenInstance {
 	Buffer fft_buffers[2];
 	Buffer fft_cpu_buffers[2];
 	std::string scene_name;
-	LumenScene scene;
+	//LumenScene scene;
+	GltfScene scene;
 
 	clock_t start;
 	bool write_exr = false;

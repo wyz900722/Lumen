@@ -271,6 +271,8 @@ struct GltfScene {
 	// std::vector<vec4us>        m_joints0;
 	// std::vector<glm::vec4> m_weights0;
 
+    tinygltf::Model tModel;
+
 	// Size of the scene
 	struct Dimensions {
 		glm::vec3 min = glm::vec3(std::numeric_limits<float>::max());

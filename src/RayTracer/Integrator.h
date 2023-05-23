@@ -14,7 +14,7 @@
 #include "shaders/commons.h"
 class Integrator {
    public:
-	Integrator(LumenInstance* instance, LumenScene* lumen_scene) : instance(instance), lumen_scene(lumen_scene) {}
+	Integrator(LumenInstance* instance, GltfScene* lumen_scene) : instance(instance), lumen_scene(lumen_scene) {}
 	virtual void init();
 	virtual void render() = 0;
 	virtual bool gui();
@@ -44,7 +44,8 @@ class Integrator {
 	std::vector<Texture2D> scene_textures;
 	uint32_t total_light_triangle_cnt = 0;
 	float total_light_area = 0;
-	LumenScene* lumen_scene;
+	GltfScene* lumen_scene;
+	float lightColorIntensity = 1.0f;
 
    private:
 	void create_blas();

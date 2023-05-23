@@ -53,7 +53,20 @@ void RayTracer::init(Window* window) {
 	vkb.init_imgui();
 	initialized = true;
 
-	scene.load_scene(scene_name);
+	//scene.load_scene(scene_name);
+
+    tinygltf::Model tmodel;
+	tinygltf::TinyGLTF tcontext;
+	std::string warn, error;
+	if (!tcontext.LoadASCIIFromFile(&tmodel, &error, &warn, scene_name)) {
+		assert(!"Error while loading scene");
+	}
+
+	{
+		scene.import_materials(tmodel);
+		scene.import_drawable_nodes(tmodel, GltfAttributes::Normal | GltfAttributes::Texcoord_0 |
+												GltfAttributes::Tangent | GltfAttributes::Color_0);
+	}
 
 	// Enable shader reflections for the render graph
 	vkb.rg->settings.shader_inference = true;
@@ -62,40 +75,40 @@ void RayTracer::init(Window* window) {
 	// so this is turned off and pipeline barriers are used instead
 	vkb.rg->settings.use_events = true;
 
-	switch (scene.config.integrator_type) {
-		case IntegratorType::Path:
+	//switch (scene.config.integrator_type) {
+	//	case IntegratorType::Path:
 			integrator = std::make_unique<Path>(this, &scene);
-			break;
-		case IntegratorType::BDPT:
-			integrator = std::make_unique<BDPT>(this, &scene);
-			break;
-		case IntegratorType::SPPM:
-			integrator = std::make_unique<SPPM>(this, &scene);
-			break;
-		case IntegratorType::VCM:
-			integrator = std::make_unique<VCM>(this, &scene);
-			break;
-		case IntegratorType::ReSTIR:
-			integrator = std::make_unique<ReSTIR>(this, &scene);
-			break;
-		case IntegratorType::ReSTIRGI:
-			integrator = std::make_unique<ReSTIRGI>(this, &scene);
-			break;
-		case IntegratorType::PSSMLT:
-			integrator = std::make_unique<PSSMLT>(this, &scene);
-			break;
-		case IntegratorType::SMLT:
-			integrator = std::make_unique<SMLT>(this, &scene);
-			break;
-		case IntegratorType::VCMMLT:
-			integrator = std::make_unique<VCMMLT>(this, &scene);
-			break;
-		case IntegratorType::DDGI:
-			integrator = std::make_unique<DDGI>(this, &scene);
-			break;
-		default:
-			break;
-	}
+	//		break;
+	//	case IntegratorType::BDPT:
+	//		integrator = std::make_unique<BDPT>(this, &scene);
+	//		break;
+	//	case IntegratorType::SPPM:
+	//		integrator = std::make_unique<SPPM>(this, &scene);
+	//		break;
+	//	case IntegratorType::VCM:
+	//		integrator = std::make_unique<VCM>(this, &scene);
+	//		break;
+	//	case IntegratorType::ReSTIR:
+	//		integrator = std::make_unique<ReSTIR>(this, &scene);
+	//		break;
+	//	case IntegratorType::ReSTIRGI:
+	//		integrator = std::make_unique<ReSTIRGI>(this, &scene);
+	//		break;
+	//	case IntegratorType::PSSMLT:
+	//		integrator = std::make_unique<PSSMLT>(this, &scene);
+	//		break;
+	//	case IntegratorType::SMLT:
+	//		integrator = std::make_unique<SMLT>(this, &scene);
+	//		break;
+	//	case IntegratorType::VCMMLT:
+	//		integrator = std::make_unique<VCMMLT>(this, &scene);
+	//		break;
+	//	case IntegratorType::DDGI:
+	//		integrator = std::make_unique<DDGI>(this, &scene);
+	//		break;
+	//	default:
+	//		break;
+	//}
 	integrator->init();
 	post_fx.init(*instance);
 	init_resources();
@@ -277,13 +290,17 @@ float RayTracer::draw_frame() {
 }
 
 void RayTracer::parse_args(int argc, char* argv[]) {
-	scene_name = "scenes/caustics.json";
-	std::regex fn("(.*).(.json|.xml)");
-	for (int i = 0; i < argc; i++) {
-		if (std::regex_match(argv[i], fn)) {
-			scene_name = argv[i];
-		}
-	}
+	//scene_name = "scenes/caustics.json";
+	//std::regex fn("(.*).(.json|.xml)");
+	//for (int i = 0; i < argc; i++) {
+	//	if (std::regex_match(argv[i], fn)) {
+	//		scene_name = argv[i];
+	//	}
+	//}
+	// scene_name = "D:\\wyz\\raytrace\\downloaded_resources\\robot_toon\\robot-toon.gltf";
+	//scene_name = "D:\\wyz\\models\\bieshu\\main.gltf";
+	scene_name = "D:\\wyz\\models\\demo\\887053776094010679.skp.gltf";
+	//scene_name = "D:\\wyz\\models\\sheji\\887053776094007546.skp.gltf";
 }
 void RayTracer::cleanup() {
 	const auto device = vkb.ctx.device;
